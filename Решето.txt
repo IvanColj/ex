@@ -1,0 +1,78 @@
+Решето
+
+private void OnBuildClicked(object sender, EventArgs e)
+{
+    ErrorLabel.IsVisible = false;
+
+    if (!int.TryParse(InputN.Text, out int n) || n < 2 || n > 10000)
+    {
+        ErrorLabel.Text = "Введите число от 2 до 10000";
+        ErrorLabel.IsVisible = true;
+        SieveView.ItemsSource = null;
+        return;
+    }
+
+    bool[] primes = BuildSieve(n);
+
+    var items = new List<SieveItem>();
+    for (int i = 0; i <= n; i++)
+        items.Add(new SieveItem { Number = i, IsPrime = primes[i] });
+
+    SieveView.ItemsSource = items;
+}
+
+private bool[] BuildSieve(int n)
+{
+    bool[] isPrime = new bool[n + 1];
+    for (int i = 2; i <= n; i++)
+    {
+        isPrime[i] = true;
+    }
+    for (int i = 2; i <= n; i++)
+    {
+        if (!isPrime[i])
+            continue;
+        int k = i * 2;
+        while (k <= n)
+        {
+            isPrime[k] = false;
+            k += i;
+        }
+    }
+    return isPrime;
+}
+
+public class SieveItem
+{
+    public int Number { get; set; }
+    public bool IsPrime { get; set; }
+}
+
+<VerticalStackLayout Padding="16" Spacing="8">
+
+    <HorizontalStackLayout Spacing="8">
+        <Entry x:Name="InputN"
+           WidthRequest="120"
+           Keyboard="Numeric"
+           Placeholder="N (2..10000)" />
+
+        <Button Text="Сформировать решето"
+            Clicked="OnBuildClicked" />
+    </HorizontalStackLayout>
+
+    <Label x:Name="ErrorLabel"
+       TextColor="Red"
+       IsVisible="False" />
+
+    <CollectionView x:Name="SieveView">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <HorizontalStackLayout Padding="4" Spacing="16">
+                    <Label Text="{Binding Number}" />
+                    <Label Text="{Binding IsPrime}" />
+                </HorizontalStackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+
+</VerticalStackLayout>

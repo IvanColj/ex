@@ -1,0 +1,34 @@
+Календарь_выпадающий_список_генератор
+<DatePicker Format="d">
+</DatePicker>
+
+Ввод только чисел
+<Entry MaxLength="4" Keyboard="Numeric" TextChanged="NumberEntry_TextChanged"/>
+private void NumberEntry_TextChanged(object sender, TextChangedEventArgs e)
+{
+    if (!string.IsNullOrEmpty(e.NewTextValue) &&
+        !e.NewTextValue.All(char.IsDigit))
+    {
+        ((Entry)sender).Text = e.OldTextValue;
+    }
+}
+
+выпадающий список
+<Picker x:Name="languagePicker" Title = "Язык программирования"
+                SelectedIndexChanged="PickerSelectedIndexChanged">
+            <Picker.Items>
+                <x:String>C#</x:String>
+                <x:String>JavaScript</x:String>
+                <x:String>Java</x:String>
+            </Picker.Items>
+        </Picker>
+
+void PickerSelectedIndexChanged(object sender, EventArgs e)
+    {
+        header.Text = $"Вы выбрали: {languagePicker.SelectedItem}";
+    }
+
+Генератор случайных чисел
+var rnd = new Random();
+// Число от 0 до 9
+int x2 = rnd.Next(10);

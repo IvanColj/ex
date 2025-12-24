@@ -1,0 +1,20 @@
+<Entry x:Name="RateEntry"
+       Placeholder="Например: 10"
+       Keyboard="Numeric"
+       TextChanged="OnTextChanged"/>
+
+<Button Text="Рассчитать" 
+        Clicked="OnCalculateClicked"
+        WidthRequest="120"
+        HeightRequest="50"/>
+
+        public MainPage()
+        {
+            InitializeComponent();
+
+#if WINDOWS
+            ClearButton.IsVisible = true;
+            TotalPaymentGrid.IsVisible = true;
+            OverpaymentGrid.IsVisible = true;
+#endif
+        }

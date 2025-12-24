@@ -1,0 +1,125 @@
+Кубики )
+private void OnPlayersChanged(object sender, ValueChangedEventArgs e)
+    {
+        PlayersLabel.Text = ((int)e.NewValue).ToString();
+        UpdateMaxCount();
+    }
+
+    // изменение грани
+    private void OnFaceChanged(object sender, ValueChangedEventArgs e)
+    {
+        FaceLabel.Text = ((int)e.NewValue).ToString();
+    }
+
+    // изменение количества кубиков (слайдер)
+    private void OnCountChanged(object sender, ValueChangedEventArgs e)
+    {
+        CountLabel.Text = ((int)Math.Round(e.NewValue)).ToString();
+    }
+
+    // пересчёт максимума слайдера: игроков * 5
+    private void UpdateMaxCount()
+    {
+        int players = (int)PlayersStepper.Value;
+        int maxDice = players * 5;
+
+        CountSlider.Maximum = maxDice;
+
+        if (CountSlider.Value > maxDice)
+            CountSlider.Value = maxDice;
+
+        CountLabel.Text = ((int)Math.Round(CountSlider.Value)).ToString();
+    }
+
+    // Нажатие "Рассчитать"
+    private void OnCalcClicked(object sender, EventArgs e)
+    {
+        int players = (int)PlayersStepper.Value;
+        int face = (int)FaceStepper.Value; // здесь просто для инфы
+        int k = int.Parse(CountLabel.Text);
+
+        int totalDice = players * 5;
+
+        double p = 1.0 / 6.0;              // вероятность нужной грани[web:68]
+        double q = 1.0 - p;
+
+        // Вероятность ровно k успехов: биномиальное распределение[web:42][web:65]
+        double comb = Binomial(totalDice, k);
+        double prob = comb * Math.Pow(p, k) * Math.Pow(q, totalDice - k);
+
+        ResultLabel.Text =
+            $"Игроков: {players}, грань: {face}, кубиков: {k}\n" +
+            $"Общее количество кубиков: {totalDice}\n" +
+            $"Вероятность: {(prob * 100.0):F4} %";
+    }
+
+    // биномиальный коэффициент C(n, k)
+    private double Binomial(int n, int k)
+    {
+        if (k < 0 || k > n)
+            return 0;
+
+        if (k > n - k)
+            k = n - k;
+
+        double result = 1.0;
+
+        for (int i = 1; i <= k; i++)
+        {
+            result *= (n - (k - i));
+            result /= i;
+        }
+
+        return result;
+    }
+
+
+
+<VerticalStackLayout Padding="16" Spacing="12">
+
+        <!-- Количество игроков -->
+        <HorizontalStackLayout Spacing="8">
+            <Label Text="Игроки:" VerticalOptions="Center" />
+            <Stepper x:Name="PlayersStepper"
+                     Minimum="1"
+                     Maximum="10"
+                     Increment="1"
+                     Value="2"
+                     ValueChanged="OnPlayersChanged" />
+            <Label x:Name="PlayersLabel"
+                   Text="2" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <!-- Номер грани -->
+        <HorizontalStackLayout Spacing="8">
+            <Label Text="Грань куба (1-6):" VerticalOptions="Center" />
+            <Stepper x:Name="FaceStepper"
+                     Minimum="1"
+                     Maximum="6"
+                     Increment="1"
+                     Value="1"
+                     ValueChanged="OnFaceChanged" />
+            <Label x:Name="FaceLabel"
+                   Text="1" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <!-- Количество кубиков -->
+        <Label Text="Количество кубиков с этой гранью:" />
+        <Slider x:Name="CountSlider"
+                Minimum="1"
+                Maximum="10"
+                Value="1"
+                ValueChanged="OnCountChanged" />
+        <Label x:Name="CountLabel"
+               Text="1" />
+
+        <!-- Кнопка рассчёта -->
+        <Button Text="Рассчитать"
+                Clicked="OnCalcClicked" />
+
+        <!-- Результат -->
+        <Label x:Name="ResultLabel"
+               Text=""
+               LineBreakMode="WordWrap" />
+
+    </VerticalStackLayout>

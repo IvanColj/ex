@@ -1,0 +1,67 @@
+Банер
+
+bool moveRight = true;
+double x = 0;
+DateTime startTime;
+
+public MainPage()
+{
+    InitializeComponent();
+    startTime = DateTime.Now;
+
+    Dispatcher.StartTimer(TimeSpan.FromMilliseconds(50), OnTick);
+}
+
+private bool OnTick()
+{
+    var elapsed = DateTime.Now - startTime;
+    TimeLabel.Text = $"Время: {elapsed.TotalSeconds:F1} c";
+
+    if (BannerArea.Width <= 0 || BannerLabel.Width <= 0)
+        return true;
+
+    double maxX = BannerArea.Width - BannerLabel.Width;
+    double step = 5;
+
+    if (moveRight)
+        x += step;
+    else
+        x -= step;
+
+    if (x < 0)
+    {
+        x = 0;
+        moveRight = true;
+    }
+    else if (x > maxX)
+    {
+        x = maxX;
+        moveRight = false;
+    }
+
+    BannerLabel.TranslationX = x;
+
+    return true;
+}
+
+private void OnChangeDirectionClicked(object sender, EventArgs e)
+{
+    moveRight = !moveRight;
+}
+
+<VerticalStackLayout Padding="20" Spacing="20">
+    <Label x:Name="TimeLabel"
+       Text="Время: 0.0 c" />
+    <Button Text="Сменить направление"
+        Clicked="OnChangeDirectionClicked" />
+    <Grid x:Name="BannerArea"
+      HeightRequest="50"
+      BackgroundColor="LightGray">
+
+        <Label x:Name="BannerLabel"
+           Text="Баннер"
+           VerticalOptions="Center"
+           HorizontalOptions="Start" />
+    </Grid>
+
+</VerticalStackLayout>

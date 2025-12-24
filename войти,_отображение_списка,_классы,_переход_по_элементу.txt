@@ -1,0 +1,114 @@
+private async void OnLoginClicked(object sender, EventArgs e)
+{
+    string enteredLogin = login.Text?.Trim() ?? string.Empty;
+    string enteredPassword = Password.Text?.Trim() ?? string.Empty;
+
+    if (enteredLogin == "root" && enteredPassword == "root")
+    {
+        await Navigation.PushAsync(new NewPage1());
+    }
+    else
+    {
+        await DisplayAlert("Ошибка", "Неверный логин или пароль!", "OK");
+        Password.Text = string.Empty;
+    }
+
+<CollectionView x:Name="BookView"
+        SelectionMode="Single"
+        SelectionChanged="BookViewBooksView_SelectionChanged">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Grid
+          RowDefinitions="Auto,Auto"
+          ColumnDefinitions="2*,*">
+                <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Text="{Binding Title}"/>
+                <Label Grid.Row="1" Grid.Column="0"
+               Text="{Binding Author}" />
+                <Label Grid.Row="1" Grid.Column="1"
+               Text="{Binding Description}"
+               LineBreakMode="TailTruncation" />
+
+            </Grid>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+
+
+public static List<Book> books { get; } =
+	[
+	new Book() {
+		Id = 1, Title = "Книга 1", Author = "автор 1", Description = "Описание 1"
+	},
+    new Book() {
+        Id = 2, Title = "Книга 2", Author = "автор 2", Description = "Описание 2"
+    }
+    ];
+
+public NewPage1()
+{
+	InitializeComponent();
+	BookView.ItemsSource = books;
+}
+
+private async void BookViewBooksView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+	if (e.CurrentSelection.FirstOrDefault() is Book selected)
+	{
+		await Navigation.PushAsync(new CommentsPage(selected));
+		((CollectionView)sender).SelectedItem = null;
+	}
+}
+
+public class Book
+{
+	public int Id { get; set; }
+	public string Title { get; set; } = "";
+	public string Description { get; set; } = "";
+	public string Author { get; set; } = "";
+}
+
+
+private Book _book;
+private List<Comment> _comments = new List<Comment>();
+public CommentsPage(Book book)
+{
+	InitializeComponent();
+	_book = book;
+	LoadComments();
+}
+
+private void LoadComments()
+{
+	CommentsView.ItemsSource = _comments.Where(c => c.BookId == _book.Id).ToList();
+}
+
+private void OnSendCommentClicked(object sender, EventArgs e)
+{
+	if (string.IsNullOrWhiteSpace(CommentEntry.Text)) return;
+
+	_comments.Add(new Comment
+	{
+		BookId = _book.Id,
+		Title = "Комментарий",
+		Text = CommentEntry.Text.Trim()
+	});
+
+	CommentEntry.Text = string.Empty;
+	LoadComments();
+}
+
+public class Comment
+{
+	public int BookId { get; set; }
+	public string Title { get; set; }
+	public string Text { get; set; }
+}
+
+<CollectionView x:Name="CommentsView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Text}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+</CollectionView>

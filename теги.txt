@@ -1,0 +1,49 @@
+теги
+private bool AreTagsCorrect(string s)
+{
+    Stack<string> stack = new();
+    int i = 0;
+
+    while (i < s.Length)
+    {
+        if (s[i] != '<')
+        {
+            i++;
+            continue;
+        }
+
+        int end = s.IndexOf('>', i + 1);
+        if (end == -1)
+            return false;
+
+        string inside = s.Substring(i + 1, end - i - 1).Trim();
+        if (inside.Length == 0)
+            return false;
+
+        // закрывающий тег </...>
+        if (inside[0] == '/')
+        {
+            string name = inside.Substring(1); // всё после '/'
+
+            if (stack.Count == 0)
+                return false;
+
+            string openName = stack.Pop();
+            if (!string.Equals(openName, name))
+                return false;
+        }
+        else // открывающий тег <...>
+        {
+            string name = inside; // берём всё целиком, без разрезания по пробелу
+
+            if (name.Length == 0)
+                return false;
+
+            stack.Push(name);
+        }
+
+        i = end + 1;
+    }
+
+    return stack.Count == 0;
+}

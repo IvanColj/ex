@@ -1,0 +1,31 @@
+<Grid>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <Entry x:Name="Input1" Grid.Row="0" Grid.Column="0" WidthRequest="50"/>
+<Entry x:Name="Input2" Grid.Row="0" Grid.Column="1" WidthRequest="50"/>
+<Entry x:Name="Input3" Grid.Row="0" Grid.Column="2" WidthRequest="50"/>
+<Entry x:Name="Input4" Grid.Row="1" Grid.Column="0" WidthRequest="50"/>
+<Entry x:Name="Input5" Grid.Row="1" Grid.Column="1" WidthRequest="50"/>
+<Entry x:Name="Input6" Grid.Row="1" Grid.Column="2" WidthRequest="50"/>
+<Entry x:Name="Input7" Grid.Row="2" Grid.Column="0" WidthRequest="50"/>
+<Entry x:Name="Input8" Grid.Row="2" Grid.Column="1" WidthRequest="50"/>
+<Entry x:Name="Input9" Grid.Row="2" Grid.Column="2" WidthRequest="50"/>
+</Grid>
+
+// вывод проверки на число, вывод если не число
+if (int.TryParse(Input1.Text, out int count))
+{
+    number1 = count;
+}
+else
+{
+    DisplayAlert("Ошибка", "Что-то не так", "Все так");
+}

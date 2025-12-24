@@ -1,0 +1,66 @@
+скобки
+
+<VerticalStackLayout Padding="16" Spacing="8">
+
+        <Entry x:Name="InputEntry"
+               Placeholder="Введите скобочную последовательность" />
+
+        <Button Text="Проверить"
+                Clicked="OnCheckClicked" />
+
+        <Label x:Name="ResultLabel"
+               Text=""
+               TextColor="Black" />
+</VerticalStackLayout>
+
+private void OnCheckClicked(object sender, EventArgs e)
+    {
+        string s = InputEntry.Text ?? string.Empty;
+
+        bool ok = IsBracketsCorrect(s);
+
+        if (ok)
+        {
+            ResultLabel.Text = "Последовательность корректна";
+            ResultLabel.TextColor = Colors.Green;
+        }
+        else
+        {
+            ResultLabel.Text = "Последовательность некорректна";
+            ResultLabel.TextColor = Colors.Red;
+        }
+    }
+
+    // Простая проверка скобок через стек
+    private bool IsBracketsCorrect(string s)
+    {
+        Stack<char> st = new();
+
+        foreach (char c in s)
+        {
+            if (c == '(' || c == '[' || c == '{')
+            {
+                st.Push(c);
+            }
+            else if (c == ')' || c == ']' || c == '}')
+            {
+                if (st.Count == 0)
+                    return false;
+
+                char open = st.Pop();
+
+                if (!IsPair(open, c))
+                    return false;
+            }
+            // все остальные символы просто игнорируем
+        }
+
+        return st.Count == 0;
+    }
+
+    private bool IsPair(char open, char close)
+    {
+        return (open == '(' && close == ')') ||
+               (open == '[' && close == ']') ||
+               (open == '{' && close == '}');
+    }

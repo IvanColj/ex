@@ -1,0 +1,33 @@
+Пароль
+
+public static bool IsPasswordStrong(string password)
+{
+    if (string.IsNullOrEmpty(password))
+        return false;
+
+    const string lower = "abcdefghijklmnopqrstuvwxyz";
+    const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const string digits = "0123456789";
+
+    const string allowed = lower + upper + digits;
+
+    if (password.Length < 8)
+        return false;
+
+    bool hasUpper = false;
+    bool hasDigit = false;
+
+    foreach (char c in password)
+    {
+        if (!allowed.Contains(c))
+            return false;
+
+        if (upper.Contains(c))
+            hasUpper = true;
+
+        if (digits.Contains(c))
+            hasDigit = true;
+    }
+
+    return hasUpper && hasDigit;
+}

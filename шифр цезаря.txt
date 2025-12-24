@@ -1,0 +1,58 @@
+шифр цезаря
+public static string CaesarRuEncode(string input)
+{
+    const string alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+    int shift = 3;
+    var result = new StringBuilder(input.Length);
+
+    foreach (char c in input)
+    {
+        int index = alphabet.IndexOf(c);
+        if (index >= 0)
+        {
+            int newIndex = (index + shift) % alphabet.Length;
+            result.Append(alphabet[newIndex]);
+        }
+        else
+        {
+            result.Append(c); // не-русские символы без изменений
+        }
+    }
+
+    return result.ToString();
+}
+
+public static string CaesarRuDecode(string input)
+{
+    const string alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+    int shift = 3;
+    var result = new StringBuilder(input.Length);
+
+    foreach (char c in input)
+    {
+        int index = alphabet.IndexOf(c);
+        if (index >= 0)
+        {
+            int newIndex = index - shift;
+            if (newIndex < 0)
+                newIndex += alphabet.Length; // цикл назад по кругу
+
+            result.Append(alphabet[newIndex]);
+        }
+        else
+        {
+            result.Append(c);
+        }
+    }
+
+    return result.ToString();
+}
+
+Системы счисления
+public static string ConvertBase(string number, int fromBase, int toBase)
+{
+    int value10 = Convert.ToInt32(number, fromBase);
+    return Convert.ToString(value10, toBase);
+}
+string bin = ConvertBase("255", 10, 2);   // "11111111"
+string hex = ConvertBase("1010", 2, 16);  // "a"
