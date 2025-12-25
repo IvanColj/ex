@@ -1,0 +1,16 @@
+тест
+[Fact]
+public void Calculate_WithOneMonthTerm_ReturnsCorrectPayment()
+{
+    // Arrange
+    double amount = 100000;
+    double annualRate = 12.5;
+    int months = 1;
+    double expected = amount * (1 + annualRate / 12 / 100);
+
+    // Act
+    double result = CreditCalculator.Calculate(amount, annualRate, months);
+
+    // Assert
+    Assert.Equal(expected, result, 2);
+}
