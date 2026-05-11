@@ -1,0 +1,36 @@
+CREATE TABLE products
+(
+    article   text NOT NULL
+        PRIMARY KEY,
+    name      text NOT NULL,
+    type      text,
+    min_price real,
+    width     real
+);
+
+CREATE TABLE materials
+(
+    name      text NOT NULL
+        PRIMARY KEY,
+    type      text,
+    price     real,
+    stock     real,
+    min_stock real,
+    pkg       real,
+    unit      text
+);
+
+CREATE TABLE scrap
+(
+    type    text NOT NULL
+        PRIMARY KEY,
+    percent real
+);
+
+CREATE TABLE coefficients
+(
+    type text NOT NULL
+        PRIMARY KEY,
+    val  real
+);
+
