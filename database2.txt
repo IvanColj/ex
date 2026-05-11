@@ -1,0 +1,56 @@
+CREATE TABLE material_types
+(
+    id   serial
+        PRIMARY KEY,
+    name text NOT NULL
+        UNIQUE
+);
+
+CREATE TABLE materials
+(
+    id        serial
+        PRIMARY KEY,
+    name      text NOT NULL,
+    type_id   integer
+        REFERENCES material_types,
+    price     real NOT NULL,
+    stock     real NOT NULL,
+    min_qty   real NOT NULL,
+    pack_size real NOT NULL,
+    unit      text NOT NULL
+);
+
+CREATE TABLE suppliers
+(
+    name       text NOT NULL
+        PRIMARY KEY,
+    type       text,
+    inn        text,
+    rating     integer,
+    start_date date
+);
+
+CREATE TABLE scrap
+(
+    type    text NOT NULL
+        PRIMARY KEY,
+    percent real
+);
+
+CREATE TABLE coefficients
+(
+    type text NOT NULL
+        PRIMARY KEY,
+    val  real
+);
+
+CREATE TABLE products
+(
+    article text NOT NULL
+        PRIMARY KEY,
+    name    text,
+    type    text,
+    price   real,
+    width   real
+);
+
